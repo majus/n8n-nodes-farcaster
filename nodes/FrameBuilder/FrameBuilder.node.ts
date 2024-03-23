@@ -189,7 +189,7 @@ export class FrameBuilder implements INodeType {
 			addMetaTag('fc:frame:image', image);
 			addMetaTag('fc:frame:image:aspect_ratio', imageAspectRatio);
 			if (postUrl) {
-				addMetaTag('fc:frame:postUrl', postUrl);
+				addMetaTag('fc:frame:post_url', postUrl);
 			}
 			if ('items' in buttons) {
 				buttons.items.forEach((button, i) => {
