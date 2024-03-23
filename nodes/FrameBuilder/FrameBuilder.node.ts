@@ -183,7 +183,7 @@ export class FrameBuilder implements INodeType {
 				meta.content = value;
 				document.head.append(meta);
 			}
-			addMetaTag('fc:frame:version', version);
+			addMetaTag('fc:frame', version);
 			addMetaTag('og:image', image);
 			addMetaTag('fc:frame:image', image);
 			addMetaTag('fc:frame:image:aspect_ratio', imageAspectRatio);
@@ -210,7 +210,7 @@ export class FrameBuilder implements INodeType {
 			}
 			const anOutput: INodeExecutionData = {
 				json: {
-					output: document.documentElement.outerHTML,
+					output: dom.serialize(),
 				},
 			};
 			returnData.push(anOutput);
