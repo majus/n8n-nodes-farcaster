@@ -26,6 +26,24 @@ export class FrameBuilder implements INodeType {
 				description: 'URL of frame image',
 			},
 			{
+				displayName: 'Aspect Ratio',
+				name: 'imageAspectRatio',
+				type: 'options',
+				options: [
+					{
+						name: '1.91:1',
+						value: '1.91:1',
+					},
+					{
+						name: '1:1',
+						value: '1:1',
+					},
+				],
+				required: true,
+				default: '1.91:1',
+				description: 'Image aspect ratio',
+			},
+			{
 				displayName: 'Buttons',
 				name: 'buttons',
 				type: 'fixedCollection',
@@ -84,7 +102,7 @@ export class FrameBuilder implements INodeType {
 							},
 							{
 								displayName: 'Post URL',
-								name: 'post_url',
+								name: 'postUrl',
 								type: 'string',
 								default: '',
 								description: 'Custom Post URL',
@@ -115,23 +133,6 @@ export class FrameBuilder implements INodeType {
 						type: 'string',
 						default: '',
 						description: 'Text input label',
-					},
-					{
-						displayName: 'Aspect Ratio',
-						name: 'imageAspecRatio',
-						type: 'options',
-						options: [
-							{
-								name: '1.91:1',
-								value: '1.91:1',
-							},
-							{
-								name: '1:1',
-								value: '1:1',
-							},
-						],
-						default: '1.91:1',
-						description: 'Image aspect ratio',
 					},
 					{
 						displayName: 'Callback URL',
@@ -168,9 +169,10 @@ export class FrameBuilder implements INodeType {
 		const returnData: INodeExecutionData[] = [];
 		for (let i = 0; i < items.length; i++) {
 			const image = this.getNodeParameter('image', i) as string;
+			const imageAspectRatio = this.getNodeParameter('imageAspectRatio', i) as string;
 			const buttons = this.getNodeParameter('buttons', i) as [any];
 			const version = this.getNodeParameter('version', i) as string;
-			const { inputTextLabel, imageAspectRatio, postUrl, state, template } = this.getNodeParameter(
+			const { inputTextLabel, postUrl, state, template } = this.getNodeParameter(
 				'additionalFields',
 				i,
 			) as IDataObject;
