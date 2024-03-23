@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-farcaster",
+  "name": "@majus/n8n-nodes-farcaster",
   "version": "0.1.0",
   "description": "Farcaster nodes",
   "keywords": [
