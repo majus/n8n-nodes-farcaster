@@ -95,13 +95,6 @@ export class FrameBuilder implements INodeType {
 				// description: '',
 			},
 			{
-				displayName: 'Input',
-				name: 'inputTextLabel',
-				type: 'string',
-				default: '',
-				description: 'Text input label',
-			},
-			{
 				displayName: 'Version',
 				name: 'version',
 				type: 'string',
@@ -116,6 +109,13 @@ export class FrameBuilder implements INodeType {
 				placeholder: 'Add Field',
 				default: {},
 				options: [
+					{
+						displayName: 'Input',
+						name: 'inputTextLabel',
+						type: 'string',
+						default: '',
+						description: 'Text input label',
+					},
 					{
 						displayName: 'Aspect Ratio',
 						name: 'imageAspecRatio',
@@ -169,9 +169,8 @@ export class FrameBuilder implements INodeType {
 		for (let i = 0; i < items.length; i++) {
 			const image = this.getNodeParameter('image', i) as string;
 			const buttons = this.getNodeParameter('buttons', i) as [any];
-			const inputTextLabel = this.getNodeParameter('inputTextLabel', i) as string;
 			const version = this.getNodeParameter('version', i) as string;
-			const { imageAspectRatio, postUrl, state, template } = this.getNodeParameter(
+			const { inputTextLabel, imageAspectRatio, postUrl, state, template } = this.getNodeParameter(
 				'additionalFields',
 				i,
 			) as IDataObject;
