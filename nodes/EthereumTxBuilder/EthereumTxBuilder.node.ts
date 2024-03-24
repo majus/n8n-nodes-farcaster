@@ -56,7 +56,8 @@ export class EthereumTxBuilder implements INodeType {
 				displayName: 'Value',
 				name: 'value',
 				type: 'string',
-				default: 'Transaction ETH value (represented in WEI)',
+				default: '',
+				description: 'Transaction ETH value (represented in WEI)',
 			},
 			{
 				displayName: 'Attribution',
