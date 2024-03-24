@@ -1,6 +1,6 @@
 {
   "name": "@majus/n8n-nodes-farcaster",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Farcaster nodes",
   "keywords": [
     "n8n-community-node-package"
@@ -32,7 +32,7 @@
     "credentials": [],
     "nodes": [
       "dist/nodes/FrameBuilder/FrameBuilder.node.js",
-      "dist/nodes/FrameBuilder/EthereumTxBuilder.node.js"
+      "dist/nodes/EthereumTxBuilder/EthereumTxBuilder.node.js"
     ]
   },
   "devDependencies": {
