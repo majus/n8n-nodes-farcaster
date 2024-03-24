@@ -31,7 +31,8 @@
     "n8nNodesApiVersion": 1,
     "credentials": [],
     "nodes": [
-      "dist/nodes/FrameBuilder/FrameBuilder.node.js"
+      "dist/nodes/FrameBuilder/FrameBuilder.node.js",
+      "dist/nodes/FrameBuilder/EthereumTxBuilder.node.js"
     ]
   },
   "devDependencies": {
