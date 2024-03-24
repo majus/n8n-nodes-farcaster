@@ -1,10 +1,22 @@
-![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
+# What is it?
 
-# n8n-nodes-starter
+n8n is a no-code automation tool which allows to easily build complex workflows even for non-developer.
+But there was a lack of convenient ways to build Farcaseter frames there, **until now**.
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](n8n.io). It includes the node linter and other dependencies.
+This set of n8n nodes allow to easily build Farcaster frames on the fly and handle user submissions.
+With help of hundreds of other nodes already supported in n8n, the possibilities for building workflows are practically endless!
+ 
+# How it's made?
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+I've cloned the official n8n nodes starter repository, removed the examples and introduced my nodes from scratch there.
+There two nodes implemented:
+- FramesBuilder — allows to dynamically build an HTML with a set of meta tags according tothe Farcaster specification
+- EthereumTxBuilder — allows to build a transaction object to be sent back to the Farcaster in order to initiate an Ethereum transaction
+
+Currently, the following Ethereum blockchains are supported:
+- Mainnet
+- Base
+- Optimism
 
 ## Prerequisites
 
@@ -18,29 +30,9 @@ You need the following installed on your development machine:
 	```
 * Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
 
-
-## Using this starter
-
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
-
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-    ```
-    git clone https://github.com/<your organization>/<your-repo-name>.git
-    ```
-3. Run `npm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `npm run lint` to check for errors or `npm run lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
-
 ## More information
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+Refer to n8n [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
 
 ## License
 
