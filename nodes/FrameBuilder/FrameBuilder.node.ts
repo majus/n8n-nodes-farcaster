@@ -159,6 +159,37 @@ export class FrameBuilder implements INodeType {
 						noDataExpression: true,
 						description: 'HTML template to embed meta tags into',
 					},
+					{
+						displayName: 'Custom Meta',
+						name: 'customMeta',
+						type: 'fixedCollection',
+						default: [],
+						typeOptions: {
+							multipleValues: true,
+						},
+						options: [
+							{
+								name: 'items',
+								displayName: 'Button N',
+								values: [
+									{
+										displayName: 'Name',
+										name: 'name',
+										type: 'string',
+										default: '',
+										description: 'Custom meta tag name',
+									},
+									{
+										displayName: 'Value',
+										name: 'value',
+										type: 'string',
+										default: '',
+										description: 'Custom meta tag value',
+									},
+								],
+							},
+						],
+					},
 				],
 			},
 		],
@@ -172,7 +203,7 @@ export class FrameBuilder implements INodeType {
 			const imageAspectRatio = this.getNodeParameter('imageAspectRatio', i) as string;
 			const buttons = this.getNodeParameter('buttons', i) as [any];
 			const version = this.getNodeParameter('version', i) as string;
-			const { inputTextLabel, postUrl, state, template } = this.getNodeParameter(
+			const { inputTextLabel, postUrl, state, template, customMeta } = this.getNodeParameter(
 				'additionalFields',
 				i,
 			) as IDataObject;
@@ -209,6 +240,7 @@ export class FrameBuilder implements INodeType {
 			if (state && state !== '{}') {
 				addMetaTag('fc:frame:state', state);
 			}
+			customMeta?.items.forEach(({ name, value }) => addMetaTag(name, value));
 			const anOutput: INodeExecutionData = {
 				json: {
 					output: dom.serialize(),
