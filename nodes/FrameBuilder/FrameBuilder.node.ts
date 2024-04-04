@@ -1,7 +1,12 @@
 // @ts-nocheck
 import { JSDOM } from 'jsdom';
 import { IExecuteFunctions } from 'n8n-core';
-import { INodeType, INodeExecutionData, INodeTypeDescription } from 'n8n-workflow';
+import {
+	INodeType,
+	INodeExecutionData,
+	INodeTypeDescription,
+	IN8nHttpFullResponse,
+} from 'n8n-workflow';
 
 export class FrameBuilder implements INodeType {
 	description: INodeTypeDescription = {
@@ -24,24 +29,6 @@ export class FrameBuilder implements INodeType {
 				required: true,
 				default: '',
 				description: 'URL of frame image',
-			},
-			{
-				displayName: 'Aspect Ratio',
-				name: 'imageAspectRatio',
-				type: 'options',
-				options: [
-					{
-						name: '1.91:1',
-						value: '1.91:1',
-					},
-					{
-						name: '1:1',
-						value: '1:1',
-					},
-				],
-				required: true,
-				default: '1.91:1',
-				description: 'Image aspect ratio',
 			},
 			{
 				displayName: 'Buttons',
@@ -113,12 +100,11 @@ export class FrameBuilder implements INodeType {
 				// description: '',
 			},
 			{
-				displayName: 'Version',
-				name: 'version',
-				type: 'string',
-				required: true,
-				default: 'vNext',
-				description: 'Version of the Frame',
+				displayName: 'Respond Immediately',
+				name: 'respondNow',
+				type: 'boolean',
+				default: true,
+				description: 'Whether to respond immediately or pass the response down the workflow',
 			},
 			{
 				displayName: 'Additional Fields',
@@ -127,6 +113,23 @@ export class FrameBuilder implements INodeType {
 				placeholder: 'Add Field',
 				default: {},
 				options: [
+					{
+						displayName: 'Aspect Ratio',
+						name: 'imageAspectRatio',
+						type: 'options',
+						options: [
+							{
+								name: '1.91:1',
+								value: '1.91:1',
+							},
+							{
+								name: '1:1',
+								value: '1:1',
+							},
+						],
+						default: '1.91:1',
+						description: 'Image aspect ratio',
+					},
 					{
 						displayName: 'Input',
 						name: 'inputTextLabel',
@@ -190,6 +193,13 @@ export class FrameBuilder implements INodeType {
 							},
 						],
 					},
+					{
+						displayName: 'Version',
+						name: 'version',
+						type: 'string',
+						default: 'vNext',
+						description: 'Version of the Frame',
+					},
 				],
 			},
 		],
@@ -197,16 +207,19 @@ export class FrameBuilder implements INodeType {
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
-		const returnData: INodeExecutionData[] = [];
-		for (let i = 0; i < items.length; i++) {
+		const returnData: INodeExecutionData[] = items.map((item, i) => {
 			const image = this.getNodeParameter('image', i) as string;
-			const imageAspectRatio = this.getNodeParameter('imageAspectRatio', i) as string;
 			const buttons = this.getNodeParameter('buttons', i) as [any];
-			const version = this.getNodeParameter('version', i) as string;
-			const { inputTextLabel, postUrl, state, template, customMeta } = this.getNodeParameter(
-				'additionalFields',
-				i,
-			) as IDataObject;
+			const respondNow = this.getNodeParameter('respondNow', i) as boolean;
+			const {
+				imageAspectRatio = '1.91:1',
+				inputTextLabel,
+				postUrl,
+				state,
+				template,
+				customMeta,
+				version = 'vNext',
+			} = this.getNodeParameter('additionalFields', i) as IDataObject;
 			const dom = new JSDOM(template);
 			const document = dom.window.document;
 			function addMetaTag(name: string, value: string) {
@@ -241,13 +254,20 @@ export class FrameBuilder implements INodeType {
 				addMetaTag('fc:frame:state', state);
 			}
 			customMeta?.items.forEach(({ name, value }) => addMetaTag(name, value));
-			const anOutput: INodeExecutionData = {
-				json: {
-					output: dom.serialize(),
-				},
-			};
-			returnData.push(anOutput);
-		}
+			const html = dom.serialize();
+			// Respond to webhook with first result
+			if (respondNow && i === 0) {
+				const response: IN8nHttpFullResponse = {
+					body: html,
+					headers: {
+						'content-type': 'text/html; charset=utf-8',
+					},
+					statusCode: 200,
+				};
+				this.sendResponse(response);
+			}
+			return { json: { html } } as INodeExecutionData;
+		});
 		return [returnData];
 	}
 }
