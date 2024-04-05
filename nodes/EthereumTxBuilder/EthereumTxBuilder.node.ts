@@ -4,7 +4,7 @@ import { INodeType, INodeExecutionData, INodeTypeDescription } from 'n8n-workflo
 
 export class EthereumTxBuilder implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'EthereumTxBuilder',
+		displayName: 'Farcaster: Transaction builder',
 		name: 'ethereumTxBuilder',
 		icon: 'file:EthereumTxBuilder.svg',
 		group: ['transform', 'output'],
@@ -60,11 +60,11 @@ export class EthereumTxBuilder implements INodeType {
 				description: 'Transaction ETH value (represented in WEI)',
 			},
 			{
-				displayName: 'Attribution',
-				name: 'attribution',
+				displayName: 'Respond Immediately',
+				name: 'respondNow',
 				type: 'boolean',
-				default: false,
-				description: 'Whether to include the calldata attribution suffix',
+				default: true,
+				description: 'Whether to respond immediately or pass the response down the workflow',
 			},
 			{
 				displayName: 'Additional Fields',
@@ -88,6 +88,13 @@ export class EthereumTxBuilder implements INodeType {
 						description:
 							'JSON ABI which must include encoded function type and should include potential error types',
 					},
+					{
+						displayName: 'Attribution',
+						name: 'attribution',
+						type: 'boolean',
+						default: false,
+						description: 'Whether to include the calldata attribution suffix',
+					},
 				],
 			},
 		],
@@ -101,22 +108,31 @@ export class EthereumTxBuilder implements INodeType {
 			const to = this.getNodeParameter('recipient', i) as string;
 			const method = this.getNodeParameter('method', i) as string;
 			const value = this.getNodeParameter('value', i) as string;
-			const attribution = this.getNodeParameter('attribution', i) as boolean;
-			const { data, abi } = this.getNodeParameter('additionalFields', i) as IDataObject;
-			const anOutput: INodeExecutionData = {
-				json: {
-					chainId,
-					method,
-					attribution,
-					params: {
-						abi,
-						to,
-						data,
-						value,
-					},
+			const respondNow = this.getNodeParameter('respondNow', i) as boolean;
+			const { data, abi, attribution } = this.getNodeParameter('additionalFields', i) as IDataObject;
+			const json = {
+				chainId,
+				method,
+				attribution,
+				params: {
+					abi,
+					to,
+					data,
+					value,
 				},
 			};
-			returnData.push(anOutput);
+			// Respond to webhook with first result
+			if (respondNow && i === 0) {
+				const response: IN8nHttpFullResponse = {
+					body: json,
+					headers: {
+						'content-type': 'application/json; charset=utf-8',
+					},
+					statusCode: 200,
+				};
+				this.sendResponse(response);
+			}
+			returnData.push({ json } as INodeExecutionData);
 		}
 		return [returnData];
 	}

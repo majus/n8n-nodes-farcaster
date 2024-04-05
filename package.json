@@ -1,6 +1,6 @@
 {
   "name": "@majus/n8n-nodes-farcaster",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Farcaster nodes",
   "keywords": [
     "n8n-community-node-package"

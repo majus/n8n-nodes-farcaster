@@ -10,7 +10,7 @@ import {
 
 export class FrameBuilder implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'FrameBuilder',
+		displayName: 'Farcaster: Frame builder',
 		name: 'frameBuilder',
 		icon: 'file:FrameBuilder.svg',
 		group: ['transform', 'output'],
