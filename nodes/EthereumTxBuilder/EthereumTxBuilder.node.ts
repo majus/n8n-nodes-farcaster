@@ -20,7 +20,12 @@ export class EthereumTxBuilder implements INodeType {
 				displayName: 'Blockchain',
 				name: 'chainId',
 				type: 'options',
+				// eslint-disable-next-line n8n-nodes-base/node-param-options-type-unsorted-items
 				options: [
+					{
+						name: 'Ethereum',
+						value: 'eip155:1',
+					},
 					{
 						name: 'Base',
 						value: 'eip155:8453',
@@ -30,12 +35,40 @@ export class EthereumTxBuilder implements INodeType {
 						value: 'eip155:10',
 					},
 					{
-						name: 'Ethereum',
-						value: 'eip155:1',
+						name: 'Degen',
+						value: 'eip155:666666666',
+					},
+					{
+						name: 'Gnosis',
+						value: 'eip155:100',
+					},
+					{
+						name: 'Zora',
+						value: 'eip155:7777777',
+					},
+					{
+						name: 'Polygon',
+						value: 'eip155:137',
+					},
+					{
+						name: 'Testnet: Ethereum Sepolia',
+						value: 'eip155:11155111',
+					},
+					{
+						name: 'Testnet: Arbitrum Sepolia',
+						value: 'eip155:421614',
+					},
+					{
+						name: 'Testnet: Base Sepolia',
+						value: 'eip155:84532',
+					},
+					{
+						name: 'Testnet: Optimism Sepolia',
+						value: 'eip155:11155420',
 					},
 				],
 				required: true,
-				default: 'eip155:8453',
+				default: 'eip155:11155111',
 				description: 'Blockchain ID in CAIP-2 format',
 			},
 			{
