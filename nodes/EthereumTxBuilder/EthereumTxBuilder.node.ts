@@ -93,13 +93,6 @@ export class EthereumTxBuilder implements INodeType {
 				description: 'Transaction ETH value (represented in WEI)',
 			},
 			{
-				displayName: 'Respond Immediately',
-				name: 'respondNow',
-				type: 'boolean',
-				default: true,
-				description: 'Whether to respond immediately or pass the response down the workflow',
-			},
-			{
 				displayName: 'Additional Fields',
 				name: 'additionalFields',
 				type: 'collection',
@@ -141,7 +134,6 @@ export class EthereumTxBuilder implements INodeType {
 			const to = this.getNodeParameter('recipient', i) as string;
 			const method = this.getNodeParameter('method', i) as string;
 			const value = this.getNodeParameter('value', i) as string;
-			const respondNow = this.getNodeParameter('respondNow', i) as boolean;
 			const { data, abi, attribution } = this.getNodeParameter('additionalFields', i) as IDataObject;
 			const json = {
 				chainId,
@@ -154,17 +146,6 @@ export class EthereumTxBuilder implements INodeType {
 					value,
 				},
 			};
-			// Respond to webhook with first result
-			if (respondNow && i === 0) {
-				const response: IN8nHttpFullResponse = {
-					body: json,
-					headers: {
-						'content-type': 'application/json; charset=utf-8',
-					},
-					statusCode: 200,
-				};
-				this.sendResponse(response);
-			}
 			returnData.push({ json } as INodeExecutionData);
 		}
 		return [returnData];
