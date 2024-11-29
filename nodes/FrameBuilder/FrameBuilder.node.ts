@@ -100,13 +100,6 @@ export class FrameBuilder implements INodeType {
 				// description: '',
 			},
 			{
-				displayName: 'Respond Immediately',
-				name: 'respondNow',
-				type: 'boolean',
-				default: true,
-				description: 'Whether to respond immediately or pass the response down the workflow',
-			},
-			{
 				displayName: 'Additional Fields',
 				name: 'additionalFields',
 				type: 'collection',
@@ -210,7 +203,6 @@ export class FrameBuilder implements INodeType {
 		const returnData: INodeExecutionData[] = items.map((item, i) => {
 			const image = this.getNodeParameter('image', i) as string;
 			const buttons = this.getNodeParameter('buttons', i) as [any];
-			const respondNow = this.getNodeParameter('respondNow', i) as boolean;
 			const {
 				imageAspectRatio = '1.91:1',
 				inputTextLabel,
@@ -255,17 +247,6 @@ export class FrameBuilder implements INodeType {
 			}
 			customMeta?.items.forEach(({ name, value }) => addMetaTag(name, value));
 			const html = dom.serialize();
-			// Respond to webhook with first result
-			if (respondNow && i === 0) {
-				const response: IN8nHttpFullResponse = {
-					body: html,
-					headers: {
-						'content-type': 'text/html; charset=utf-8',
-					},
-					statusCode: 200,
-				};
-				this.sendResponse(response);
-			}
 			return { json: { html } } as INodeExecutionData;
 		});
 		return [returnData];
