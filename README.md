@@ -1,3 +1,9 @@
+# Deprecated
+
+This custom n8n node is still supported, but has been moved to a single monorepo: [majus/n8n-nodes-web3](https://github.com/majus/n8n-nodes-web3).
+
+This repository will be archived and eventually deleted.
+
 # What is it?
 
 n8n is a no-code automation tool which allows to easily build complex workflows even for non-developer.
